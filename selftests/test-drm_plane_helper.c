@@ -8,6 +8,15 @@
 #include <drm/drm_plane_helper.h>
 #include <drm/drm_modes.h>
 
+static void set_src(struct drm_plane_state *plane_state,
+                    unsigned int src_x, unsigned int src_y,
+                    unsigned int src_w, unsigned int src_h)
+{
+       plane_state->src_x = src_x;
+       plane_state->src_y = src_y;
+       plane_state->src_w = src_w;
+       plane_state->src_h = src_h;
+}
 
 static bool check_src_eq(struct drm_plane_state *plane_state,
 			 unsigned int src_x, unsigned int src_y,
@@ -105,7 +114,7 @@ static void igt_check_plane_state(struct kunit *test)
 						  DRM_PLANE_HELPER_NO_SCALING,
 						  DRM_PLANE_HELPER_NO_SCALING,
 						  false, false);
-	KUNIT_EXPECT_TRUE_MSG(test, ret < 0,
+	KUNIT_EXPECT_TRUE_MSG(test, ret >= 0,
 			      "Rotated clipping check should pass\n");
 	KUNIT_EXPECT_TRUE(test, plane_state.visible);
 	KUNIT_EXPECT_TRUE(test, check_src_eq(&plane_state,
@@ -121,14 +130,14 @@ static void igt_check_plane_state(struct kunit *test)
 						  DRM_PLANE_HELPER_NO_SCALING,
 						  false, false);
 	KUNIT_EXPECT_TRUE_MSG(test, ret,
-			      "Should not be able to position on the crtc with
-			      can_position=false\n");
+			      "Should not be able to position on the crtc with "
+			      "can_position=false\n");
 
 	ret = drm_atomic_helper_check_plane_state(&plane_state, &crtc_state,
 						  DRM_PLANE_HELPER_NO_SCALING,
 						  DRM_PLANE_HELPER_NO_SCALING,
 						  true, false);
-	KUNIT_EXPECT_TRUE_MSG(test, ret < 0,
+	KUNIT_EXPECT_TRUE_MSG(test, ret >= 0,
 			      "Simple positioning should work\n");
 	KUNIT_EXPECT_TRUE(test, plane_state.visible);
 	KUNIT_EXPECT_TRUE(test, check_src_eq(&plane_state,
@@ -148,7 +157,7 @@ static void igt_check_plane_state(struct kunit *test)
 						  0x8000,
 						  DRM_PLANE_HELPER_NO_SCALING,
 						  false, false);
-	KUNIT_EXPECT_TRUE_MSG(test, ret < 0,
+	KUNIT_EXPECT_TRUE_MSG(test, ret >= 0,
 			      "Upscaling exactly 2x should work\n");
 	KUNIT_EXPECT_TRUE(test, plane_state.visible);
 	KUNIT_EXPECT_TRUE(test, check_src_eq(&plane_state,
@@ -164,7 +173,7 @@ static void igt_check_plane_state(struct kunit *test)
 	ret = drm_atomic_helper_check_plane_state(&plane_state, &crtc_state,
 						  DRM_PLANE_HELPER_NO_SCALING,
 						  0x20000, false, false);
-	KUNIT_EXPECT_TRUE_MSG(test, ret < 0,
+	KUNIT_EXPECT_TRUE_MSG(test, ret >= 0,
 			      "Should succeed with exact scaling limit\n");
 	KUNIT_EXPECT_TRUE(test, plane_state.visible);
 	KUNIT_EXPECT_TRUE(test, check_src_eq(&plane_state,
@@ -178,7 +187,7 @@ static void igt_check_plane_state(struct kunit *test)
 						  DRM_PLANE_HELPER_NO_SCALING,
 						  0x10001,
 						  true, false);
-	KUNIT_EXPECT_TRUE_MSG(test, ret < 0,
+	KUNIT_EXPECT_TRUE_MSG(test, ret >= 0,
 			      "Should succeed by clipping to exact multiple");
 	KUNIT_EXPECT_TRUE(test, plane_state.visible);
 	KUNIT_EXPECT_TRUE(test, check_src_eq(&plane_state,
@@ -191,7 +200,7 @@ static void igt_check_plane_state(struct kunit *test)
 						  DRM_PLANE_HELPER_NO_SCALING,
 						  0x10001,
 						  false, false);
-	KUNIT_EXPECT_TRUE_MSG(test, ret < 0,
+	KUNIT_EXPECT_TRUE_MSG(test, ret >= 0,
 			      "Should succeed by clipping to exact multiple");
 	KUNIT_EXPECT_TRUE(test, plane_state.visible);
 	KUNIT_EXPECT_TRUE(test, check_src_eq(&plane_state, 0x40002, 0x40002,
@@ -204,7 +213,7 @@ static void igt_check_plane_state(struct kunit *test)
 						  0xffff,
 						  DRM_PLANE_HELPER_NO_SCALING,
 						  true, false);
-	KUNIT_EXPECT_TRUE_MSG(test, ret < 0,
+	KUNIT_EXPECT_TRUE_MSG(test, ret >= 0,
 			      "Should succeed by clipping to exact multiple");
 	KUNIT_EXPECT_TRUE(test, plane_state.visible);
 	/* Should not be rounded to 0x20001, which would be upscaling. */
@@ -219,7 +228,7 @@ static void igt_check_plane_state(struct kunit *test)
 						  0xffff,
 						  DRM_PLANE_HELPER_NO_SCALING,
 						  false, false);
-	KUNIT_EXPECT_TRUE_MSG(test, ret < 0,
+	KUNIT_EXPECT_TRUE_MSG(test, ret >= 0,
 			      "Should succeed by clipping to exact multiple");
 	KUNIT_EXPECT_TRUE(test, plane_state.visible);
 	KUNIT_EXPECT_TRUE(test, check_src_eq(&plane_state, 0x3fffe, 0x3fffe,
