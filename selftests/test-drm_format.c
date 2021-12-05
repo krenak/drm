@@ -103,7 +103,6 @@ static void igt_check_drm_format_min_pitch(struct kunit *test)
 	KUNIT_EXPECT_TRUE(test, drm_format_info_min_pitch(info, 0, 0) >= 0);
 	KUNIT_EXPECT_TRUE(test, drm_format_info_min_pitch(info, -1, 0) >= 0);
 	KUNIT_EXPECT_TRUE(test, drm_format_info_min_pitch(info, 1, 0) >= 0);
-
 	KUNIT_EXPECT_TRUE(test, drm_format_info_min_pitch(info, 0, 1) >= 1);
 	KUNIT_EXPECT_TRUE(test, drm_format_info_min_pitch(info, 0, 2) >= 2);
 	KUNIT_EXPECT_TRUE(test, drm_format_info_min_pitch(info, 0, 640) >= 640);
@@ -158,7 +157,6 @@ static void igt_check_drm_format_min_pitch(struct kunit *test)
 	KUNIT_EXPECT_TRUE(test, drm_format_info_min_pitch(info, 0, 0) >= 0);
 	KUNIT_EXPECT_TRUE(test, drm_format_info_min_pitch(info, -1, 0) >= 0);
 	KUNIT_EXPECT_TRUE(test, drm_format_info_min_pitch(info, 1, 0) >= 0);
-
 	KUNIT_EXPECT_TRUE(test, drm_format_info_min_pitch(info, 0, 1) >= 4);
 	KUNIT_EXPECT_TRUE(test, drm_format_info_min_pitch(info, 0, 2) >= 8);
 	KUNIT_EXPECT_TRUE(test, drm_format_info_min_pitch(info, 0, 640) >= 2560);
@@ -257,9 +255,9 @@ static void igt_check_drm_format_min_pitch(struct kunit *test)
 	KUNIT_EXPECT_TRUE(test, drm_format_info_min_pitch(info, 0, 4096) >= 8192);
 	KUNIT_EXPECT_TRUE(test, drm_format_info_min_pitch(info, 0, 671) >= 1342);
 	KUNIT_EXPECT_TRUE(test, drm_format_info_min_pitch(info, 0, UINT_MAX) >=
-			(uint64_t)UINT_MAX * 2);
+			 (uint64_t)UINT_MAX * 2);
 	KUNIT_EXPECT_TRUE(test, drm_format_info_min_pitch(info, 0, UINT_MAX - 1) >=
-			(uint64_t)(UINT_MAX - 1) * 2);
+			 (uint64_t)(UINT_MAX - 1) * 2);
 }
 
 static struct kunit_case drm_format_test[] = {
