@@ -99,11 +99,10 @@ config DRM_FORMAT_KUNIT_TEST
 	select DRM_KMS_HELPER
 	default KUNIT_ALL_TESTS
 	help
-	  This option provides KUnit modules that can be used to run
-	  various selftests on parts of the DRM format API.
-	  This option is not useful for distributions or general kernels,
-	  but only for kernel developers working on DRM and
-	  associated drivers.
+	  This option provides KUnit module that can be used to run
+	  a unit test on the DRM format API. This option is not useful
+	  for distributions or general kernels, but only for kernel
+	  developers working on DRM and associated drivers.
 
 	  If in doubt, say "N".
 
